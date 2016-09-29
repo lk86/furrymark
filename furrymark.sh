@@ -4,7 +4,6 @@ runs=0
 
 c='o҉'
 [[ $# -gt 0 ]] && c=$1
-echo $c
 rm benchmark.log
 size=$((`tput lines` * `tput cols`))
 screen=`eval printf "%.0s$c" {1..$size}`
@@ -33,8 +32,6 @@ cleanup() {
     exit
 }
 
-echo "Starting benchmark..."
-sleep 1
 watch -tpe -n 1 "kill -USR1 $$" &
 pid=$!
 
