@@ -15,7 +15,7 @@ fg() {
 }
     
 os() {
-    eval printf "%.0s$o" {1..$(($RANDOM % 47))}
+    eval printf "%.0s$o" {1..$(($RANDOM % 19))}
 }
         
 while [[ ${#screen} -lt $size ]]; do
@@ -50,5 +50,5 @@ do
     echo -ne $screen
     let frames++
     i=$(($RANDOM % ${#screen}))
-    screen="${screen:0:$i}$fg${screen:$i}"
+    screen="${screen:0:$i}$(fg)${screen:$i}"
 done
