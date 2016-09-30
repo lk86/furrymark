@@ -18,7 +18,7 @@ os() {
 scree() {
     RANDOM=$RANDOM
     size=$(($COLS * $LINES))
-    [[ $RANDOM -lt 200 ]] && screen=""
+    [[ $RANDOM -gt 25000 ]] && screen=${screen:((${#screen}/4)):}
     while [[ ${#screen} -lt $size ]]; do
         col="$(fg)"
         ((size+=${#col}))
