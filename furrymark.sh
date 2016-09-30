@@ -2,13 +2,9 @@
 frames=0
 runs=0
 
-o='o҉'
-[[ $# -gt 0 ]] && c=$1
 rm benchmark.log
 COLS=`tput cols`
 LINES=`tput lines`
-size=$(($COLS * $LINES))
-#screen=$(eval printf "%.0s$o" {1..$size})
 RANDOM=$$
 
 fg() {
@@ -16,11 +12,13 @@ fg() {
 }
     
 os() {
-    eval printf "%.0s$o" {1..$(($RANDOM % 19 + 10))}
+    eval printf "%.0so҉" {1..$(($RANDOM%19 + 10))}
 }
 
 scree() {
     RANDOM=$RANDOM
+    size=$(($COLS * $LINES))
+    screen=""
     while [[ ${#screen} -lt $size ]]; do
         col="$(fg)"
         ((size+=${#col}))
@@ -41,21 +39,19 @@ check() {
 
 cleanup() {
     kill $pid 2>/dev/null
-    sleep 2
-    echo -e "\033[0m"
+    clear
+    echo -ne "\033[0m"
     cat benchmark.log
     exit
 }
 
-scree
-
 watch -tpe -n 1 "kill -USR1 $$" &
 pid=$!
 
+scree
 while :
 do
     echo -ne $screen 2>/dev/null
     let frames++
     scree
-    #screen=${screen//o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉/$(fg)o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉}
 done
