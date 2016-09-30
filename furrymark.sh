@@ -6,22 +6,30 @@ rm benchmark.log
 COLS=`tput cols`
 LINES=`tput lines`
 RANDOM=$$
+i=1
+
+for n in {1..1000}
+do
+    rands+=(`od -A n -t d -N 1 /dev/urandom`)
+done
 
 fg() {
-    echo "\033[38;5;$(($RANDOM % 256))m"
+    echo "\033[38;5;${rands[i]}m"
 }
     
 os() {
-    eval printf "%.0so҉" {1..$(($RANDOM%47 + 10))}
+    eval printf "%.0so҉" {1..$((${rands[i]}))}
 }
 
 scree() {
-    RANDOM=$RANDOM
     size=$(($COLS * $LINES))
-    [[ $RANDOM -gt 30000 ]] && screen=${screen:((${#screen}/4)):}
+    #screen=""
+    screen=${screen:((${#screen}/4)):}
     while [[ ${#screen} -lt $size ]]; do
         col="$(fg)"
         ((size+=${#col}))
+        let i++
+        [[ $i -ge 1000 ]] && i=1
         screen="${screen}${col}$(os)"
     done
 }
@@ -45,10 +53,11 @@ cleanup() {
     exit
 }
 
+scree
+
 watch -tpe -n 1 "kill -USR1 $$" &
 pid=$!
 
-scree
 while :
 do
     echo -ne $screen 2>/dev/null
