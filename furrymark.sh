@@ -1,6 +1,7 @@
 #!/bin/bash
 frames=0
 runs=0
+maxruns=$1
 
 rm benchmark.log
 COLS=`tput cols`
@@ -23,7 +24,6 @@ os() {
 
 scree() {
     size=$(($COLS * $LINES))
-    #screen=""
     screen=${screen:((${#screen}/4)):}
     while [[ ${#screen} -lt $size ]]; do
         col="$(fg)"
@@ -38,11 +38,10 @@ trap "check" SIGUSR1
 trap "cleanup" SIGTERM SIGINT
 
 check() {
-    if [[ frames -ne 0 ]]; then
-        let runs++
-        echo "$runs) $frames fps at $COLS * $LINES" >> ./benchmark.log
-        frames=0
-    fi
+    [[ $runs -ne 0 ]] && echo "$runs) $frames fps at $COLS * $LINES" >> ./benchmark.log
+    [[ $runs -ge $maxruns ]] && cleanup
+    frames=0
+    let runs++
 }
 
 cleanup() {
