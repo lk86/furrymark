@@ -12,13 +12,13 @@ fg() {
 }
     
 os() {
-    eval printf "%.0so҉" {1..$(($RANDOM%19 + 10))}
+    eval printf "%.0so҉" {1..$(($RANDOM%47 + 10))}
 }
 
 scree() {
     RANDOM=$RANDOM
     size=$(($COLS * $LINES))
-    [[ $RANDOM -gt 28000 ]] && screen=${screen:((${#screen}/4)):}
+    [[ $RANDOM -gt 30000 ]] && screen=${screen:((${#screen}/4)):}
     while [[ ${#screen} -lt $size ]]; do
         col="$(fg)"
         ((size+=${#col}))
