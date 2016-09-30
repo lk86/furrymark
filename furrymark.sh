@@ -9,17 +9,14 @@ LINES=`tput lines`
 RANDOM=$$
 i=1
 
-for n in {1..1000}
-do
-    rands+=(`od -A n -t d -N 1 /dev/urandom`)
-done
+rands=(`od -A n -t u1 -N 2000 /dev/urandom`)
 
 fg() {
     echo "\033[38;5;${rands[i]}m"
 }
     
 os() {
-    eval printf "%.0so҉" {1..$((${rands[i]}))}
+    eval printf "%.0so҉" {1..${rands[i]}}
 }
 
 scree() {
@@ -29,7 +26,7 @@ scree() {
         col="$(fg)"
         ((size+=${#col}))
         let i++
-        [[ $i -ge 1000 ]] && i=1
+        [[ $i -ge ${#rands[*]} ]] && i=1
         screen="${screen}${col}$(os)"
     done
 }
