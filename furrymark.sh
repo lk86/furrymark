@@ -40,7 +40,7 @@ check() {
 }
 
 cleanup() {
-    kill $pid
+    kill $pid 2>/dev/null
     sleep 2
     echo -e "\033[0m"
     cat benchmark.log
@@ -54,7 +54,7 @@ pid=$!
 
 while :
 do
-    echo -ne $screen
+    echo -ne $screen 2>/dev/null
     let frames++
     scree
     #screen=${screen//o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉/$(fg)o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉}
