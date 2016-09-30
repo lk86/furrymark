@@ -37,7 +37,8 @@ check() {
 
 cleanup() {
     kill $pid
-    echo
+    sleep 2
+    echo -e "\033[0m"
     cat benchmark.log
     exit
 }
@@ -49,6 +50,5 @@ while :
 do
     echo -ne $screen
     let frames++
-    i=$(($RANDOM % ${#screen}))
-    screen="${screen:0:$i}$(fg)${screen:$i}"
+    #screen=${screen//o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉o҉/$(fg)o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉$(fg)o҉o҉o҉o҉o҉o҉}
 done
