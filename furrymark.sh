@@ -3,31 +3,24 @@ frames=0
 runs=0
 maxruns=$1
 
-rm benchmark.log
 COLS=`tput cols`
 LINES=`tput lines`
-RANDOM=$$
-i=1
+size=$(($COLS * $LINES))
 
 rands=(`od -A n -t u1 -N 2000 /dev/urandom`)
+i=1
 
-fg() {
-    echo "\033[38;5;${rands[i]}m"
-}
-    
 os() {
-    eval printf "%.0so҉" {1..${rands[i]}}
+    echo -n "\033[38;5;"${rands[i]}m
+    eval printf "%.0so҉" {1..$((${rands[i++]} / 3))}
 }
 
-scree() {
-    size=$(($COLS * $LINES))
-    screen=${screen:((${#screen}/4)):}
-    while [[ ${#screen} -lt $size ]]; do
-        col="$(fg)"
-        ((size+=${#col}))
-        let i++
-        [[ $i -ge ${#rands[*]} ]] && i=1
-        screen="${screen}${col}$(os)"
+frame() {
+    for ((len=0; len < size; len+=${#out}))
+    do
+        [[ i++ -ge ${#rands[*]} ]] && i=1
+        out="$(os i++)"
+        echo -ne "$out"
     done
 }
 
@@ -48,15 +41,13 @@ cleanup() {
     cat benchmark.log
     exit
 }
-
-scree
+rm benchmark.log
 
 watch -tpe -n 1 "kill -USR1 $$" &
 pid=$!
 
 while :
 do
-    echo -ne $screen 2>/dev/null
+    frame 2>/dev/null
     let frames++
-    scree
 done
